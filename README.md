@@ -7,4 +7,4 @@ Files include:
 1. Adult_Counts.csv = Haul and site-specific capture records for adult Redside Dace in Gully Creek and USJ Tributary
 2. Site_Covariates.csv = Variables measured per site
 3. Rscript01-Habitat_exploration.R = R script for running habitat exploration analysis
-4. Rscript02-GLMM_brms.R = R script for running GLMs
+4. Rscript02-GLMM_brms.R = R script for developing GLMs
