@@ -21,12 +21,6 @@ theme_set(theme_bw() +
                   legend.key = element_blank()))
 
 ################################################################################
-# read in abundance and habitat data
-################################################################################
-RSD.counts <- read.csv("Data/LifeStageAbundanceYOY.csv",header=T)
-site.covs  <- read.csv("Data/Total_Site_Covariates.csv",header=T)
-
-################################################################################
 # read in habitat data and RSD mature data
 ################################################################################
 site.covs  <- read.csv("Site_covariates.csv", header=T)
@@ -435,12 +429,13 @@ sitepreds2$ReachLength[sitepreds2$Waterbody == 'USJ Tributary' & sitepreds2$Reac
 # make site and strahler characters
 sitepreds2$site      <- as.character(sitepreds2$site)
 sitepreds2$Strahler  <- as.character(sitepreds2$Strahler)
+sitepreds2$ReachLength <- as.numeric(sitepreds2$ReachLength)
 
 # divide the site-predicted abundance by length and area
 sitepreds2$fishm2    <- sitepreds2$post/sitepreds2$Area
 sitepreds2$fishm     <- sitepreds2$post/sitepreds2$Length
 sitepreds2$fishreach <- sitepreds2$post/sitepreds2$ReachLength
-sitepreds2$fishkm    <- sitepreds2$post/(sitepreds2$Length/1000)
+sitepreds2$fishkm    <- sitepreds2$fishreach * 1000
 
 # site level fish of pool habitat 
 aggregate(sitepreds2$post, list(sitepreds2$Waterbody), median) 
@@ -461,6 +456,20 @@ aggregate(sitepreds2$fishkm, list(sitepreds2$Waterbody), quantile, probs=c(0.025
 # site level fish/km of pool habitat per waterbody
 aggregate(sitepreds2$fishkm, list(sitepreds2$Waterbody, sitepreds2$Strahler), median)
 aggregate(sitepreds2$fishkm, list(sitepreds2$Waterbody, sitepreds2$Strahler), quantile, probs=c(0.025, 0.975))
+
+# only sample estimates from gully sites - this excludes USJ tributary sites
+sitepreds2.g <- sitepreds2[!c(sitepreds2$site =='17' | sitepreds2$site =='18' | 
+                                sitepreds2$site =='19' | sitepreds2$site =='20' | 
+                                sitepreds2$site =='21' | sitepreds2$site =='22' | 
+                                sitepreds2$site =='23' | sitepreds2$site =='24' | 
+                                sitepreds2$site =='25' ),]
+
+# only sample estimates from USJ Tributary
+sitepreds2.usj<-sitepreds2[c(sitepreds2$site =='17' | sitepreds2$site =='18' | 
+                               sitepreds2$site =='19' | sitepreds2$site =='20' | 
+                               sitepreds2$site =='21' | sitepreds2$site =='22' | 
+                               sitepreds2$site =='23' | sitepreds2$site =='24' | 
+                               sitepreds2$site =='25' ),]
 
 #===============================================================================
 #===============================================================================
